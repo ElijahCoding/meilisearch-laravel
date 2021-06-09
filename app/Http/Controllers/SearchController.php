@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        return view('search');
+        $results = null;
+
+        if ($query = $request->get('query')) {
+            $results = Article::search($query)->get();
+        }
+
+        return view('search', compact('results'));
     }
 }
