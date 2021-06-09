@@ -17,6 +17,7 @@ class CreateArticlesTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('teaser');
+            $table->boolean('published')->default(false);
             $table->timestamps();
         });
     }

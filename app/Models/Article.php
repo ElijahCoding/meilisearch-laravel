@@ -9,4 +9,9 @@ use Laravel\Scout\Searchable;
 class Article extends Model
 {
     use HasFactory, Searchable;
+
+    public function shouldBeSearchable()
+    {
+        return $this->published;
+    }
 }
