@@ -20,7 +20,9 @@ class SearchController extends Controller
                     $options['filters'] = 'user_id=' . $userId;
                 }
                 return $meilisearch->search($query);
-            })->paginate(5);
+            })
+                ->paginate(5)
+                ->withQueryString();
         }
 
         return view(
