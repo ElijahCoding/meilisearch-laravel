@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -11,10 +12,20 @@ class SearchController extends Controller
     {
         $results = null;
 
+        $users = User::get();
+
         if ($query = $request->get('query')) {
-            $results = Article::search($query)->get();
+            $results = Article::search($query, function ($meilisearch, $query, &$options) use ($request) {
+                if ($userId = $request->get('user_id')) {
+                    $options['filters'] = 'user_id=' . $userId;
+                }
+                return $meilisearch->search($query);
+            })->paginate(5);
         }
 
-        return view('search', compact('results'));
+        return view(
+            'search',
+            compact(['results', 'users'])
+        );
     }
 }
